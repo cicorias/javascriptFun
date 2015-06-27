@@ -1,0 +1,21 @@
+{
+  "name": "azurepaasmonitor",
+  "version": "0.1.0",
+  "description": "Retrieves then Pings a PaaS Deployment - all members via Private IP address",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "./node_modules/mocha/bin/mocha ./test"
+  },
+  "keywords": [
+    "javascript",
+    "azure",
+    "monitor",
+    "paas",
+    "worker",
+    "web",
+    "role"
+  ],
+  "author": "Shawn Cicoria",
+  "license": "Apache-2.0"
+}
