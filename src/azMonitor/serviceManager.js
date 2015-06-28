@@ -2,42 +2,50 @@
 'use strict';
 
 var https = require('https'),                  // Module for https
-    fs =    require('fs'),                     // Required to read certs and keys
-    xml2js = require('xml2js');
+    fs =    require('fs'),                    // Required to read certs and keys
+    Promise = require("bluebird");
     
-var parser = new xml2js.Parser();
+var config = require('./privateConfig.json');
+
+var options = require('./options.json');
+
+var prequest = Promise.method(function(subscriptionId, cert){
+    options.path = options.path.replace('subid', subscriptionId);
+    options.key = cert;
+    options.cert = cert;
     
-var options = {
-    key:   fs.readFileSync('ssl/azure.pem'),  // Secret client key - here pem contains both
-    cert:  fs.readFileSync('ssl/azure.pem'),  // Public client key - here pem contains both
-    //pfx: fs.readFileSync('ssl/azure.pfx'),
-    //passphrase: 'password',
-    // rejectUnauthorized: false,              // Used for self signed server
-    host: "management.core.windows.net",                    // Server hostname
-    //path: "/subid/services/hostedservices/jettestarmpaas/deploymentslots/production",
-    path: "/subid/services/hostedservices",
-    port: 443,                                  // Server port
-    headers: { 'x-ms-version' : '2012-03-01'}
-};
-
-var callback = function(response) {
-  var str = '';    
-  response.on('data', function (chunk) {
-    str += chunk;
-  });
-
-  response.on('end', function () {
-    parser.parseString(str, function (err, result) {
-        console.log(result);
-        console.log(result.HostedServices.HostedService);
-        console.log('Done');
+    return new Promise(function(resolve,reject){ 
+         var request = https.request(options, function(response){
+             
+            console.info('setup result object');
+            var result = {
+                'httpVersion': response.httpVersion,
+                'httpStatusCode': response.statusCode,
+                'headers': response.headers,
+                'body': '',
+                'trailers': response.trailers,
+            };
+            response.on("data", function(chunk){
+                console.info('received data chunk');
+                result.body += chunk;
+            });
+            response.on("end", function(){
+                console.info("host: " + options.host);
+                console.info("azure service call status: " + result.httpStatusCode);
+                resolve(function(){ return result;});
+            });
+         });
+         
+         request.on("error",function(error){
+             console.error("failed");
+             reject(error);
+         });
+         
+         request.end();
     });
-  });
-};
+});
+  
+module.exports.run = prequest;  
+  
+  
 
-module.exports.callServer = function(subscriptionId){
-  console.log('making server call');
-  options.path = options.path.replace('subid', subscriptionId);
-  console.log('calling: '  + options.host + options.path);
-  https.request(options, callback).end();
-};

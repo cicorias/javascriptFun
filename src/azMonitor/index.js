@@ -2,8 +2,39 @@
 
 console.log('starting...');
 
-var sm = require('./serviceManager');
+var fs = require('fs'),
+	Promise = require("bluebird"),
+    xml2js = require('xml2js');
 
-sm.callServer('88a17470-0d0c-4271-894f-410b681dfeef');
+var sm = require('./serviceManager'),
+	cm = require('./certManager');
 
-console.log('done...');
+var config = require('./privateConfig.json');
+
+var parser = new xml2js.Parser();
+
+setInterval(getServices, config.timeout);
+
+function getServices(){
+	cm.run(config.pemFile)
+		.then(function(certdata){
+			sm.run(config.subscriptionId, certdata )
+			.then(function(data2){
+				var body = data2().body;
+
+				parser.parseString(body, function(err, result){
+					if (err) 
+						throw err;
+						
+					console.info('parsing xml done');
+					//console.log(result);	
+				
+				});
+			}).catch(function(e){
+				console.error("error on sm.run: "+ e);
+			});
+		}).catch( function(e) {
+			console.error("error on cm run: " + e);
+		});
+}
+
