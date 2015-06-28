@@ -1,6 +1,12 @@
 {
-    "host": "management.core.windows.net", 
+"allServices": 
+{    "host": "management.core.windows.net", 
     "path": "/subid/services/hostedservices",
     "port": 443,
     "headers": { "x-ms-version" : "2012-03-01"}
+},
+"deployment" :{ "host": "management.core.windows.net", 
+    "path": "/subid/services/hostedservices/svcname/deploymentslots/production",
+    "port": 443,
+    "headers": { "x-ms-version" : "2012-03-01"}}
 }
