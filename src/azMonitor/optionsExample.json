@@ -1,0 +1,12 @@
+var options = {
+    //key:   fs.readFileSync('ssl/azure.pem'),  // Secret client key - here pem contains both
+    //cert:  fs.readFileSync('ssl/azure.pem'),  // Public client key - here pem contains both
+    //pfx: fs.readFileSync('ssl/azure.pfx'),
+    //passphrase: 'password',
+    // rejectUnauthorized: false,              // Used for self signed server
+    host: "management.core.windows.net",                    // Server hostname
+    //path: "/subid/services/hostedservices/jettestarmpaas/deploymentslots/production",
+    path: "/subid/services/hostedservices",
+    port: 443,                                  // Server port
+    headers: { 'x-ms-version' : '2012-03-01'}
+};
