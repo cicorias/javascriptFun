@@ -8,7 +8,7 @@ var fs = require('fs'),
 
 var sm = require('./serviceManager'),
     cm = require('./certManager');
-
+    
 var config = require('./privateConfig.json');
 
 var parser = new xml2js.Parser();

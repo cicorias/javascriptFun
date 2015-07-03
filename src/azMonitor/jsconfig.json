@@ -1,0 +1,13 @@
+{
+    "compilerOptions":{
+        "target" : "ES6",
+        "module" : "commonjs"
+    },
+    "files":[
+        "index.js",
+        "options.json",
+        "certManager.js",
+        "createCerts.sh",
+        "serviceManager.js"
+]
+}
