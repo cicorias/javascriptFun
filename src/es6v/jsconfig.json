@@ -1,0 +1,13 @@
+{
+	"compilerOptions": {
+		"target": "ES6",
+		"module": "system"
+	},
+	"files": [
+		"app/*",
+		"app/index.js",
+		"app/amodule.js",
+		"index.js",
+		"amodule.js"
+	]
+}
